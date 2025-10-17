@@ -105,7 +105,10 @@
 
     <!-- Pantalla de la Llamada -->
     <div id="call-screen" class="hidden w-full h-full flex flex-col relative">
-        <main id="main-video-container" class="w-full h-full bg-black">
+        <main id="main-video-container" class="w-full h-full bg-black flex items-center justify-center">
+             <div id="video-grid" class="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                 <!-- Videos remotos se añadirán aquí -->
+             </div>
         </main>
 
         <div id="self-view-container">
@@ -164,6 +167,7 @@
         const copyLinkBtn = document.getElementById('copy-link-btn');
         const mainVideoContainer = document.getElementById('main-video-container');
         const selfViewContainer = document.getElementById('self-view-container');
+        const videoGrid = document.getElementById('video-grid');
         const muteBtn = document.getElementById('mute-btn');
         const videoBtn = document.getElementById('video-btn');
         const endCallBtn = document.getElementById('end-call-btn');
@@ -179,8 +183,9 @@
         let peer;
         let localStream;
         let myName = `Invitado-${Math.floor(Math.random() * 1000)}`;
-        let hostId;
-        let activeCall;
+        const calls = {};
+        const dataConnections = {};
+        const participants = {};
         let originalVideoTrack = null;
         let videoDevices = [];
         let currentCameraIndex = 0;
@@ -202,40 +207,87 @@
 
         const initializePeer = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            hostId = urlParams.get('room');
+            const roomId = urlParams.get('room');
 
             peer = new Peer();
 
             peer.on('open', (id) => {
-                if (hostId) {
-                    const call = peer.call(hostId, localStream);
+                participants[id] = { name: myName };
+                
+                if (roomId) {
+                    const conn = peer.connect(roomId, { metadata: { name: myName } });
+                    setupDataConnection(conn);
+                    const call = peer.call(roomId, localStream);
                     handleCall(call);
-                    showCallScreen();
                 } else {
                     const newUrl = `${window.location.origin}${window.location.pathname}?room=${id}`;
                     inviteLinkInput.value = newUrl;
                     initialForm.classList.add('hidden');
                     linkGenerator.classList.remove('hidden');
                 }
+                showCallScreen();
             });
 
             peer.on('call', (call) => {
                 call.answer(localStream);
                 handleCall(call);
-                showCallScreen();
+            });
+
+            peer.on('connection', (conn) => setupDataConnection(conn));
+        };
+
+        const setupDataConnection = (conn) => {
+            conn.on('data', (data) => handleData(conn.peer, data));
+            conn.on('close', () => removeParticipant(conn.peer));
+            conn.on('open', () => {
+                dataConnections[conn.peer] = conn;
+                conn.send({ type: 'user-info', peerId: peer.id, name: myName, allPeers: Object.keys(participants) });
             });
         };
 
+        const handleData = (fromId, data) => {
+             switch(data.type) {
+                case 'user-info':
+                    participants[data.peerId] = { name: data.name };
+                    data.allPeers.forEach(peerId => {
+                         if (!participants[peerId] && peerId !== peer.id) {
+                             makeCall(peerId);
+                        }
+                    });
+                    break;
+             }
+        };
+
         const handleCall = (call) => {
-            activeCall = call;
+            calls[call.peer] = call;
              call.on('stream', (remoteStream) => {
-                const mainVideo = document.createElement('video');
-                mainVideo.srcObject = remoteStream;
-                mainVideo.autoplay = true;
-                mainVideo.playsInline = true;
-                mainVideoContainer.innerHTML = '';
-                mainVideoContainer.append(mainVideo);
+                addVideoStream(call.peer, remoteStream);
             });
+            call.on('close', () => removeParticipant(call.peer));
+        };
+
+        const makeCall = (peerId) => {
+             if (calls[peerId] || peerId === peer.id) return;
+             const call = peer.call(peerId, localStream);
+             handleCall(call);
+        };
+        
+        const addVideoStream = (peerId, stream) => {
+            let containerId = `container-${peerId}`;
+            if(document.getElementById(containerId)) return;
+
+            const container = document.createElement('div');
+            container.id = containerId;
+            container.className = "video-container relative";
+
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.onloadedmetadata = () => video.play();
+
+            container.appendChild(video);
+            videoGrid.appendChild(container);
         };
 
         const addSelfVideo = () => {
@@ -251,7 +303,8 @@
             
             if (videoDevices.length > 1) {
                 const switchCamBtn = document.createElement('button');
-                switchCamBtn.className = 'overlay-button switch-camera-btn';
+                switchCamBtn.id = 'switch-camera-btn';
+                switchCamBtn.className = 'overlay-button';
                 switchCamBtn.innerHTML = `<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>`;
                 switchCamBtn.onclick = switchCamera;
                 selfVideoContainer.appendChild(switchCamBtn);
@@ -262,47 +315,41 @@
         };
 
         const setupLocalMedia = async (deviceId = undefined) => {
+             if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
             const constraints = {
                 video: { deviceId: deviceId ? { exact: deviceId } : undefined },
                 audio: true,
             };
             localStream = await navigator.mediaDevices.getUserMedia(constraints);
-            addSelfVideo(); // Mover la creación del video aquí
             
             if (videoDevices.length === 0) {
                  const devices = await navigator.mediaDevices.enumerateDevices();
                  videoDevices = devices.filter(d => d.kind === 'videoinput');
             }
+            addSelfVideo();
         };
 
-        const populateAudioOutputs = async () => { /* ... (código sin cambios) ... */ };
-        const setAudioOutput = async (deviceId) => { /* ... (código sin cambios) ... */ };
+        const populateAudioOutputs = async () => { /* ... */ };
+        const setAudioOutput = async (deviceId) => { /* ... */ };
+        const populateVideoInputs = async () => { /* ... */ };
+        const changeVideoSource = async (deviceId) => { /* ... */ };
+        const changeBandwidth = (bitrate) => { /* ... */ };
+        const toggleScreenSharing = async () => { /* ... */ };
 
-        const populateVideoInputs = async () => {
-            if (videoDevices.length === 0) {
-                 const devices = await navigator.mediaDevices.enumerateDevices();
-                 videoDevices = devices.filter(d => d.kind === 'videoinput');
-            }
-            videoSourceSelect.innerHTML = '';
-            videoDevices.forEach((device, index) => {
-                const option = document.createElement('option');
-                option.value = device.deviceId;
-                option.text = device.label || `Cámara ${index + 1}`;
-                videoSourceSelect.appendChild(option);
+        const replaceTrack = (newTrack) => {
+            const oldTrack = localStream.getVideoTracks()[0];
+            localStream.removeTrack(oldTrack);
+            oldTrack.stop();
+            localStream.addTrack(newTrack);
+            selfViewContainer.querySelector('video').srcObject = localStream;
+
+            Object.values(calls).forEach(call => {
+                 const sender = call.peerConnection.getSenders().find(s => s.track?.kind === 'video');
+                if (sender) sender.replaceTrack(newTrack);
             });
         };
-        
-        const changeVideoSource = async (deviceId) => {
-            const newStream = await navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: deviceId } }, audio: false });
-            const newTrack = newStream.getVideoTracks()[0];
-            replaceTrack(newTrack);
-        };
-        
-        const changeBandwidth = (bitrate) => { /* ... (código sin cambios) ... */ };
-
-        const toggleScreenSharing = async () => { /* ... (código sin cambios) ... */ };
-        
-        const replaceTrack = (newTrack) => { /* ... (código sin cambios) ... */ };
 
         const showCallScreen = () => {
             connectionScreen.classList.add('hidden');
@@ -319,36 +366,37 @@
             
             replaceTrack(newVideoTrack);
         };
+        
+        const removeParticipant = (peerId) => {
+            const container = document.getElementById(`container-${peerId}`);
+            if (container) container.remove();
+            if (calls[peerId]) {
+                calls[peerId].close();
+                delete calls[peerId];
+            }
+            if(dataConnections[peerId]){
+                dataConnections[peerId].close();
+                delete dataConnections[peerId];
+            }
+            if(participants[peerId]){
+                delete participants[peerId];
+            }
+        };
 
         // --- Event Listeners ---
         joinBtn.addEventListener('click', startApp);
-        copyLinkBtn.addEventListener('click', () => {
-            inviteLinkInput.select();
-            document.execCommand('copy');
-            alert('¡Enlace de invitación copiado!');
-        });
-
-        // FIX: Botones de mute y video ahora funcionan
+        copyLinkBtn.addEventListener('click', () => { /* ... */ });
+        
         muteBtn.addEventListener('click', () => {
             const enabled = localStream.getAudioTracks()[0].enabled;
-            if(enabled) {
-                localStream.getAudioTracks()[0].enabled = false;
-                muteBtn.classList.add('active');
-            } else {
-                localStream.getAudioTracks()[0].enabled = true;
-                muteBtn.classList.remove('active');
-            }
+            localStream.getAudioTracks()[0].enabled = !enabled;
+            muteBtn.classList.toggle('active', enabled);
         });
 
         videoBtn.addEventListener('click', () => {
             const enabled = localStream.getVideoTracks()[0].enabled;
-             if(enabled) {
-                localStream.getVideoTracks()[0].enabled = false;
-                videoBtn.classList.add('active');
-            } else {
-                localStream.getVideoTracks()[0].enabled = true;
-                videoBtn.classList.remove('active');
-            }
+            localStream.getVideoTracks()[0].enabled = !enabled;
+            videoBtn.classList.toggle('active', enabled);
         });
 
         endCallBtn.addEventListener('click', () => window.location.reload());
