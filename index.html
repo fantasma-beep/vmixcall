@@ -1,0 +1,320 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2113.65">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="es"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;FantasmaLink&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="icon" href="https://i.ibb.co/9vR9zM8/logo-fantasma-fondo.png" type="image/png"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;link rel="apple-touch-icon" href="https://i.ibb.co/9vR9zM8/logo-fantasma-fondo.png"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="theme-color" content="#1a1a1a"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #1a1a1a;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #ffffff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#self-view-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>bottom: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: 1.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 25%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 280px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #333;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#self-view-container video {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>object-fit: cover;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scaleX(-1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#main-video-container video {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>object-fit: contain; /* Para ver el feed completo sin recortes */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.control-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(0, 0, 0, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: background-color 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.control-btn:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(0, 0, 0, 0.6);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.control-btn.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ef4444;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="flex items-center justify-center h-screen"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Pantalla de Conexión --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="connection-screen" class="text-center p-4 max-w-lg mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;img src="LOGOFANTASMA.jpg" alt="Logo de FantasmaCall" class="mx-auto mb-6 w-28 h-28 rounded-full"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1 class="text-3xl font-bold mb-4"&gt;Bienvenido a FantasmaLink&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="text-gray-400 mb-8"&gt;Ingresa tu nombre y haz clic en "Unirse" para conectar.&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="initial-form"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="user-name" placeholder="Tu Nombre" class="w-full max-w-xs px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="join-btn" class="w-full max-w-xs px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"&gt;Unirse a la Llamada&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="link-generator" class="hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>&lt;p class="text-lg text-gray-300 mb-4"&gt;Copia este enlace para invitar a tu participante:&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="flex items-center justify-center bg-gray-800 p-2 rounded-lg mb-6 max-w-md mx-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="invite-link" readonly class="w-full bg-transparent text-md font-mono text-green-400 focus:outline-none" value="Generando enlace..."&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="copy-link-btn" class="ml-4 p-2 rounded-lg bg-blue-600 hover:bg-blue-700 transition" title="Copiar Enlace"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;svg class="w-5 h-5" fill="white" viewBox="0 0 20 20"&gt;&lt;path d="M7 3a1 1 0 011-1h5a1 1 0 011 1v2h1.5a1.5 1.5 0 011.5 1.5v9a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 013 15.5v-9A1.5 1.5 0 014.5 5H6V3a1 1 0 011-1zM6 5v1h8V5h-1v1a1 1 0 01-1 1H8a1 1 0 01-1-1V5H6z"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Pantalla de la Llamada --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="call-screen" class="hidden w-full h-full flex flex-col relative"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;main id="main-video-container" class="w-full h-full bg-black"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- El video del anfitrión/programa irá aquí --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/main&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="self-view-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- El video del invitado (su propia cámara) irá aquí --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-4 z-20"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="mute-btn" class="control-btn" title="Silenciar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="video-btn" class="control-btn" title="Detener Video"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;!-- NUEVO: Botón de Ajustes --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="settings-btn" class="control-btn" title="Ajustes de Audio"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"&gt;&lt;/path&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">             </span>&lt;button id="end-call-btn" class="control-btn active" title="Salir"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"&gt;&lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H3"&gt;&lt;/path&gt;&lt;/svg&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">    </span></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- NUEVO: Modal de Ajustes de Audio --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="settings-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="bg-gray-800 p-6 rounded-lg text-left shadow-lg w-full max-w-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 class="text-xl font-bold mb-4"&gt;Seleccionar Salida de Audio&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="audio-output-list" class="flex flex-col space-y-2 mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p class="text-gray-400"&gt;No se encontraron dispositivos de audio.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="close-settings-btn" class="w-full px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition"&gt;Cerrar&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const connectionScreen = document.getElementById('connection-screen');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const callScreen = document.getElementById('call-screen');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const joinBtn = document.getElementById('join-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const userNameInput = document.getElementById('user-name');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const initialForm = document.getElementById('initial-form');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const linkGenerator = document.getElementById('link-generator');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const inviteLinkInput = document.getElementById('invite-link');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const copyLinkBtn = document.getElementById('copy-link-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const mainVideoContainer = document.getElementById('main-video-container');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const selfViewContainer = document.getElementById('self-view-container');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const muteBtn = document.getElementById('mute-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const videoBtn = document.getElementById('video-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const endCallBtn = document.getElementById('end-call-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- NUEVO: Referencias a elementos de ajustes ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const settingsBtn = document.getElementById('settings-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const settingsModal = document.getElementById('settings-modal');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const closeSettingsBtn = document.getElementById('close-settings-btn');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const audioOutputList = document.getElementById('audio-output-list');</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>let peer;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let localStream;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let myName = `Invitado-${Math.floor(Math.random() * 1000)}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let hostId;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const startApp = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>myName = userNameInput.value || myName;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const selfVideo = document.createElement('video');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>selfVideo.srcObject = localStream;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>selfVideo.muted = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>selfVideo.autoplay = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>selfVideo.playsInline = true;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>selfViewContainer.append(selfVideo);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// --- NUEVO: Llenar la lista de dispositivos de audio ---</p>
+<p class="p1"><span class="Apple-converted-space">                </span>await populateAudioOutputs();</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>initializePeer();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (err) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("Error al acceder a la cámara/micrófono:", err);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert("No se pudo acceder a tu cámara y micrófono. Revisa los permisos.");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const initializePeer = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const urlParams = new URLSearchParams(window.location.search);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>hostId = urlParams.get('room');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>peer = new Peer();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>peer.on('open', (id) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (hostId) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Soy un invitado, me conecto al host</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const conn = peer.connect(hostId, { metadata: { name: myName } });</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const call = peer.call(hostId, localStream);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>call.on('stream', (remoteStream) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>const mainVideo = document.createElement('video');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mainVideo.srcObject = remoteStream;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mainVideo.autoplay = true;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mainVideo.playsInline = true;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mainVideoContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mainVideoContainer.append(mainVideo);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showCallScreen();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Soy el host, genero el enlace</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const newUrl = `${window.location.origin}${window.location.pathname}?room=${id}`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>inviteLinkInput.value = newUrl;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>initialForm.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>linkGenerator.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>peer.on('call', (call) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Como host, respondo a la llamada del invitado</p>
+<p class="p1"><span class="Apple-converted-space">                </span>call.answer(localStream);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>call.on('stream', (remoteStream) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const mainVideo = document.createElement('video');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainVideo.srcObject = remoteStream;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainVideo.autoplay = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainVideo.playsInline = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainVideoContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>mainVideoContainer.append(mainVideo);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showCallScreen();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">             </span>peer.on('connection', (conn) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const guestName = conn.metadata.name;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert(`${guestName} se ha unido a la llamada.`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- NUEVO: Lógica para buses de audio ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const populateAudioOutputs = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!('mediaDevices' in navigator) || !('enumerateDevices' in navigator.mediaDevices)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.warn('enumerateDevices() no es soportado en este navegador.');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const devices = await navigator.mediaDevices.enumerateDevices();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const audioOutputs = devices.filter(device =&gt; device.kind === 'audiooutput');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>audioOutputList.innerHTML = ''; // Limpiar la lista</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (audioOutputs.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>audioOutputs.forEach(device =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const deviceButton = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>deviceButton.textContent = device.label || `Dispositivo ${audioOutputList.children.length + 1}`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>deviceButton.className = "w-full text-left px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition";</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>deviceButton.onclick = () =&gt; setAudioOutput(device.deviceId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>audioOutputList.appendChild(deviceButton);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>audioOutputList.innerHTML = '&lt;p class="text-gray-400"&gt;No se encontraron dispositivos de audio.&lt;/p&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const setAudioOutput = async (deviceId) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mainVideo = mainVideoContainer.querySelector('video');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (mainVideo &amp;&amp; typeof mainVideo.setSinkId === 'function') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await mainVideo.setSinkId(deviceId);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.log(`Salida de audio cambiada a: ${deviceId}`);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>alert(`Salida de audio cambiada.`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (err) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error('Error al cambiar la salida de audio:', err);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.warn('setSinkId() no es soportado en este navegador.');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('Tu navegador no soporta cambiar la salida de audio.');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>settingsModal.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const showCallScreen = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>connectionScreen.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>callScreen.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>joinBtn.addEventListener('click', startApp);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>copyLinkBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>inviteLinkInput.select();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.execCommand('copy');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>alert('¡Enlace de invitación copiado!');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>muteBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const enabled = localStream.getAudioTracks()[0].enabled;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>localStream.getAudioTracks()[0].enabled = !enabled;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>muteBtn.classList.toggle('active', enabled);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>videoBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const enabled = localStream.getVideoTracks()[0].enabled;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>localStream.getVideoTracks()[0].enabled = !enabled;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>videoBtn.classList.toggle('active', enabled);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>endCallBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>window.location.reload();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- NUEVO: Event listeners para el modal de ajustes ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>settingsBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>settingsModal.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>closeSettingsBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>settingsModal.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+<p class="p2"><br></p>
+</body>
+</html>
